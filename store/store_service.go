@@ -24,8 +24,8 @@ type StorageService struct {
 // InitializeStore 初始化redis客户端
 func InitializeStore() *StorageService {
 	redisClient := redis.NewClient(&redis.Options{
-		Addr:     "redis-11708.c292.ap-southeast-1-1.ec2.cloud.redislabs.com:11708",
-		Password: "G6Njk0oCWMqiyQ3FHGUtuTiNpnvmk9j2",
+		Addr:     "",
+		Password: "",
 		DB:       0,
 	})
 
