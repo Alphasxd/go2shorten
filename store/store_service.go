@@ -40,7 +40,7 @@ func InitializeStore() *StorageService {
 }
 
 // SaveUrlMapping 存储原始URL和短链接的映射
-func SaveUrlMapping(shortURL string, originalURL string, userId string) {
+func SaveUrlMapping(shortURL string, originalURL string, userID string) {
 	err := storeService.redisClient.Set(ctx, shortURL, originalURL, CacheDuration).Err()
 	if err != nil {
 		panic(fmt.Sprintf("Failed saving key url | Error: %v - shortUrl: %s - originalUrl: %s\n", err, shortURL, originalURL))
