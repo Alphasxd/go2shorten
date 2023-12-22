@@ -8,29 +8,31 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type URLCreationRequest struct {
-	OriginalURL string `json:"original_url" binding:"required"`
-	UserID      string `json:"user_id" binding:"required"`
+type UrlCreationRequest struct {
+	LongUrl string `json:"long_url" binding:"required"`
+	UserId  string `json:"user_id" binding:"required"`
 }
 
-func CreateShortURL(c *gin.Context) {
-	var creationRequest URLCreationRequest
+func CreateShortUrl(c *gin.Context) {
+	var creationRequest UrlCreationRequest
 	if err := c.ShouldBindJSON(&creationRequest); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	shortURL := shortener.GenerateShortURL(creationRequest.OriginalURL, creationRequest.UserID)
-	store.SaveUrlMapping(shortURL, creationRequest.OriginalURL, creationRequest.UserID)
+
+	shortUrl := shortener.GenerateShortLink(creationRequest.LongUrl, creationRequest.UserId)
+	store.SaveUrlMapping(shortUrl, creationRequest.LongUrl, creationRequest.UserId)
 
 	host := "http://localhost:9808/"
 	c.JSON(http.StatusOK, gin.H{
-		"message":   "Short URL created successfully!",
-		"short_url": host + shortURL,
+		"message":   "short url created successfully",
+		"short_url": host + shortUrl,
 	})
+
 }
 
-func HandleShortURLRedirect(c *gin.Context) {
-	shortURL := c.Param("short_url")
-	initialURL := store.RetrieveInitialUrl(shortURL)
-	c.Redirect(http.StatusFound, initialURL)
+func HandleShortUrlRedirect(c *gin.Context) {
+	shortUrl := c.Param("shortUrl")
+	initialUrl := store.RetrieveInitialUrl(shortUrl)
+	c.Redirect(http.StatusFound, initialUrl)
 }
