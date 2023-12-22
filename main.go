@@ -10,21 +10,24 @@ import (
 
 func main() {
 	r := gin.Default()
+	// / 为根路径
 	r.GET("/", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"message": "Welcome to the URL Shortener API",
 		})
 	})
 
+	// /createShortUrl 为创建短链接的路径
 	r.POST("/createShortUrl", func(c *gin.Context) {
 		handler.CreateShortUrl(c)
 	})
 
+	// /:shortUrl 为短链接重定向的路径
 	r.GET("/:shortUrl", func(c *gin.Context) {
 		handler.HandleShortUrlRedirect(c)
 	})
 
-	// Note store initialization happens here
+	// 初始化存储
 	store.InitializeStore()
 
 	err := r.Run(":9808")

@@ -8,11 +8,13 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// UrlCreationRequest 用于从JSON请求中提取数据
 type UrlCreationRequest struct {
 	LongUrl string `json:"long_url" binding:"required"`
 	UserId  string `json:"user_id" binding:"required"`
 }
 
+// CreateShortUrl 创建短链接
 func CreateShortUrl(c *gin.Context) {
 	var creationRequest UrlCreationRequest
 	if err := c.ShouldBindJSON(&creationRequest); err != nil {
@@ -31,8 +33,9 @@ func CreateShortUrl(c *gin.Context) {
 
 }
 
+// HandleShortUrlRedirect 处理短链接重定向
 func HandleShortUrlRedirect(c *gin.Context) {
 	shortUrl := c.Param("shortUrl")
 	initialUrl := store.RetrieveInitialUrl(shortUrl)
-	c.Redirect(http.StatusFound, initialUrl)
+	c.Redirect(http.StatusMovedPermanently, initialUrl)
 }
